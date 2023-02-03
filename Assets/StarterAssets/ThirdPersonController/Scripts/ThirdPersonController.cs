@@ -34,7 +34,7 @@ namespace StarterAssets
 
         [Space(10)]
         [Tooltip("The height the player can jump")]
-        public float JumpHeight = 1.2f;
+        public float JumpHeight = 3f;
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
@@ -158,6 +158,7 @@ namespace StarterAssets
 
             JumpAndGravity();
             GroundedCheck();
+            MoveForward();
             Move();
         }
 
@@ -211,10 +212,33 @@ namespace StarterAssets
                 _cinemachineTargetYaw, 0.0f);
         }
 
+        private void MoveForward()
+        {
+            float targetSpeed = SprintSpeed;
+            _speed = targetSpeed;
+            
+            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
+            if (_animationBlend < 0.01f) _animationBlend = 0f;
+
+            // normalise input direction
+            Vector3 targetDirection = Quaternion.Euler(0.0f, 0.0f, 0.0f) * Vector3.forward;
+
+            // move the player
+            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
+                             new Vector3(0.0f, 0.0f, _speed) * Time.deltaTime);
+
+            // update animator if using character
+            if (_hasAnimator)
+            {
+                _animator.SetFloat(_animIDSpeed, _animationBlend);
+                _animator.SetFloat(_animIDMotionSpeed, 1f);
+            }
+        }
+
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = MoveSpeed / 10;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -259,9 +283,9 @@ namespace StarterAssets
                                   _mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
-
+            
                 // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                //transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
 
