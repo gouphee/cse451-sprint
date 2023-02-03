@@ -9,7 +9,7 @@ public class GroundGenerator : MonoBehaviour
     public Transform startPoint; //Point from where ground tiles will start
     public PlatformTile tilePrefab;
     public float movingSpeed = 12;
-    public int tilesToPreSpawn = 15; //How many tiles should be pre-spawned
+    public int tilesToPreSpawn = 1; //How many tiles should be pre-spawned
     public int tilesWithoutObstacles = 3; //How many tiles at the beginning should not have obstacles, good for warm-up
 
     List<PlatformTile> spawnedTiles = new List<PlatformTile>();
@@ -34,12 +34,12 @@ public class GroundGenerator : MonoBehaviour
             PlatformTile spawnedTile = Instantiate(tilePrefab, spawnPosition, Quaternion.identity) as PlatformTile;
             if (tilesWithNoObstaclesTmp > 0)
             {
-                spawnedTile.DeactivateAllObstacles();
+                //spawnedTile.DeactivateAllObstacles();
                 tilesWithNoObstaclesTmp--;
             }
             else
             {
-                spawnedTile.ActivateRandomObstacle();
+                //spawnedTile.ActivateRandomObstacle();
             }
 
             spawnPosition = spawnedTile.endPoint.position;
@@ -65,7 +65,7 @@ public class GroundGenerator : MonoBehaviour
             PlatformTile tileTmp = spawnedTiles[0];
             spawnedTiles.RemoveAt(0);
             tileTmp.transform.position = spawnedTiles[spawnedTiles.Count - 1].endPoint.position - tileTmp.startPoint.localPosition;
-            tileTmp.ActivateRandomObstacle();
+            //tileTmp.ActivateRandomObstacle();
             spawnedTiles.Add(tileTmp);
         }
 

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!20 &612636999 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
+  m_PrefabInstance: {fileID: 2014687490059120669}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,9 +287,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0320e20eab2b06848a45901a845bf1a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
+  mainCamera: {fileID: 612636999}
   startPoint: {fileID: 1224835185}
-  tilePrefab: {fileID: 5217513378370151128, guid: ffea25895bc4556428caaa3c757a0f83, type: 3}
+  tilePrefab: {fileID: 759570072446112773, guid: ffd352f7c918a91458665e810729aa8f, type: 3}
   movingSpeed: 12
   tilesToPreSpawn: 15
   tilesWithoutObstacles: 3
