@@ -7,7 +7,7 @@ public class GroundGenerator : MonoBehaviour
 {
     public Camera mainCamera;
     public Transform startPoint; //Point from where ground tiles will start
-    public PlatformTile tilePrefab;
+    public PlatformTile[] tiles;
     public float movingSpeed = 12;
     public int tilesToPreSpawn = 1; //How many tiles should be pre-spawned
     public int tilesWithoutObstacles = 3; //How many tiles at the beginning should not have obstacles, good for warm-up
@@ -30,8 +30,8 @@ public class GroundGenerator : MonoBehaviour
         int tilesWithNoObstaclesTmp = tilesWithoutObstacles;
         for (int i = 0; i < tilesToPreSpawn; i++)
         {
-            spawnPosition -= tilePrefab.startPoint.localPosition;
-            PlatformTile spawnedTile = Instantiate(tilePrefab, spawnPosition, Quaternion.identity) as PlatformTile;
+            spawnPosition -= tiles[0].startPoint.localPosition;
+            PlatformTile spawnedTile = Instantiate(tiles[0], spawnPosition, Quaternion.identity) as PlatformTile;
             if (tilesWithNoObstaclesTmp > 0)
             {
                 //spawnedTile.DeactivateAllObstacles();
@@ -62,9 +62,13 @@ public class GroundGenerator : MonoBehaviour
         if (mainCamera.WorldToViewportPoint(spawnedTiles[0].endPoint.position).z < 0)
         {
             //Move the tile to the front if it's behind the Camera
-            PlatformTile tileTmp = spawnedTiles[0];
+            System.Random random = new System.Random();
+            int randomNumber = random.Next(0, tiles.Length);
+            PlatformTile tileTmp = Instantiate(tiles[randomNumber], startPoint.position, Quaternion.identity) as PlatformTile;
+            PlatformTile tileTmp2 = spawnedTiles[0];
+
             spawnedTiles.RemoveAt(0);
-            tileTmp.transform.position = spawnedTiles[spawnedTiles.Count - 1].endPoint.position - tileTmp.startPoint.localPosition;
+            tileTmp.transform.position = spawnedTiles[spawnedTiles.Count - 1].endPoint.position - tileTmp2.startPoint.localPosition;
             //tileTmp.ActivateRandomObstacle();
             spawnedTiles.Add(tileTmp);
         }

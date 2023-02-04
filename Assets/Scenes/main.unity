@@ -289,7 +289,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 612636999}
   startPoint: {fileID: 1224835185}
-  tilePrefab: {fileID: 759570072446112773, guid: ffd352f7c918a91458665e810729aa8f, type: 3}
+  tiles:
+  - {fileID: 759570072446112773, guid: ffd352f7c918a91458665e810729aa8f, type: 3}
+  - {fileID: 7874873886593229564, guid: c6a2859578e9e8a41ae84d475e4f6062, type: 3}
+  - {fileID: 759570072446112773, guid: ffd352f7c918a91458665e810729aa8f, type: 3}
+  - {fileID: 759570072446112773, guid: ffd352f7c918a91458665e810729aa8f, type: 3}
+  - {fileID: 759570072446112773, guid: ffd352f7c918a91458665e810729aa8f, type: 3}
   movingSpeed: 12
   tilesToPreSpawn: 15
   tilesWithoutObstacles: 3
