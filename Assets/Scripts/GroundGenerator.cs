@@ -6,13 +6,20 @@ using UnityEngine.SceneManagement;
 public class GroundGenerator : MonoBehaviour
 {
     public Camera mainCamera;
-    public Transform startPoint; //Point from where ground tiles will start
+    public Transform floorStartPoint; //Point from where ground tiles will start
+    public Transform ceilingStartPoint;
+    public Transform leftWallStartPoint;
+    public Transform rightWallStartPoint;
     public PlatformTile[] tiles;
     public float movingSpeed = 12;
     public int tilesToPreSpawn = 1; //How many tiles should be pre-spawned
     public int tilesWithoutObstacles = 3; //How many tiles at the beginning should not have obstacles, good for warm-up
 
-    List<PlatformTile> spawnedTiles = new List<PlatformTile>();
+    List<PlatformTile> spawnedFloorTiles = new List<PlatformTile>();
+    List<PlatformTile> spawnedCeilingTiles = new List<PlatformTile>();
+    List<PlatformTile> spawnedLeftWallTiles = new List<PlatformTile>();
+    List<PlatformTile> spawnedRightWallTiles = new List<PlatformTile>();
+
     int nextTileToActivate = -1;
     [HideInInspector]
     public bool gameOver = false;
@@ -26,12 +33,31 @@ public class GroundGenerator : MonoBehaviour
     {
         instance = this;
 
-        Vector3 spawnPosition = startPoint.position;
+        Vector3 floorSpawnPosition = floorStartPoint.position;
+        Vector3 ceilingSpawnPosition = ceilingStartPoint.position;
+        Vector3 leftWallSpawnPosition = leftWallStartPoint.position;
+        Vector3 rightWallSpawnPosition = rightWallStartPoint.position;
+
+
+
+        
         int tilesWithNoObstaclesTmp = tilesWithoutObstacles;
         for (int i = 0; i < tilesToPreSpawn; i++)
         {
-            spawnPosition -= tiles[0].startPoint.localPosition;
-            PlatformTile spawnedTile = Instantiate(tiles[0], spawnPosition, Quaternion.identity) as PlatformTile;
+            floorSpawnPosition -= tiles[0].startPoint.localPosition;
+            ceilingSpawnPosition -= tiles[0].startPoint.localPosition;
+            leftWallSpawnPosition -= tiles[0].startPoint.localPosition;
+            rightWallSpawnPosition -= tiles[0].startPoint.localPosition;
+            
+
+            PlatformTile spawnedFloorTile = Instantiate(tiles[0], floorSpawnPosition, Quaternion.identity) as PlatformTile;
+            PlatformTile spawnedCeilingTile = Instantiate(tiles[0], ceilingSpawnPosition, Quaternion.identity) as PlatformTile;
+            PlatformTile spawnedLeftWallTile = Instantiate(tiles[0], rightWallSpawnPosition, Quaternion.identity) as PlatformTile;
+            PlatformTile spawnedRightWallTile = Instantiate(tiles[0], leftWallSpawnPosition, Quaternion.identity) as PlatformTile;
+
+            spawnedLeftWallTile.transform.Rotate(0f, 0f, 90f);
+            spawnedRightWallTile.transform.Rotate(0f, 0f, 90f);
+
             if (tilesWithNoObstaclesTmp > 0)
             {
                 //spawnedTile.DeactivateAllObstacles();
@@ -42,9 +68,20 @@ public class GroundGenerator : MonoBehaviour
                 //spawnedTile.ActivateRandomObstacle();
             }
 
-            spawnPosition = spawnedTile.endPoint.position;
-            spawnedTile.transform.SetParent(transform);
-            spawnedTiles.Add(spawnedTile);
+            floorSpawnPosition = spawnedFloorTile.endPoint.position;
+            ceilingSpawnPosition = spawnedCeilingTile.endPoint.position;
+            leftWallSpawnPosition = spawnedLeftWallTile.endPoint.position;
+            rightWallSpawnPosition = spawnedRightWallTile.endPoint.position;
+
+            spawnedFloorTile.transform.SetParent(transform);
+            spawnedCeilingTile.transform.SetParent(transform);
+            spawnedLeftWallTile.transform.SetParent(transform);
+            spawnedRightWallTile.transform.SetParent(transform);
+
+            spawnedFloorTiles.Add(spawnedFloorTile);
+            spawnedCeilingTiles.Add(spawnedCeilingTile);
+            spawnedLeftWallTiles.Add(spawnedLeftWallTile);
+            spawnedRightWallTiles.Add(spawnedRightWallTile);
         }
     }
 
@@ -55,22 +92,22 @@ public class GroundGenerator : MonoBehaviour
         //Increase speed the higher score we get
         if (!gameOver && gameStarted)
         {
-            transform.Translate(-spawnedTiles[0].transform.forward * Time.deltaTime * (movingSpeed + (score / 500)), Space.World);
+            transform.Translate(-spawnedFloorTiles[0].transform.forward * Time.deltaTime * (movingSpeed + (score / 500)), Space.World);
             score += Time.deltaTime * movingSpeed;
         }
 
-        if (mainCamera.WorldToViewportPoint(spawnedTiles[0].endPoint.position).z < 0)
+        if (mainCamera.WorldToViewportPoint(spawnedFloorTiles[0].endPoint.position).z < 0)
         {
             //Move the tile to the front if it's behind the Camera
             System.Random random = new System.Random();
             int randomNumber = random.Next(0, tiles.Length);
-            PlatformTile tileTmp = Instantiate(tiles[randomNumber], startPoint.position, Quaternion.identity) as PlatformTile;
-            PlatformTile tileTmp2 = spawnedTiles[0];
+            PlatformTile tileTmp = Instantiate(tiles[randomNumber], floorStartPoint.position, Quaternion.identity) as PlatformTile;
+            PlatformTile tileTmp2 = spawnedFloorTiles[0];
 
-            spawnedTiles.RemoveAt(0);
-            tileTmp.transform.position = spawnedTiles[spawnedTiles.Count - 1].endPoint.position - tileTmp2.startPoint.localPosition;
+            spawnedFloorTiles.RemoveAt(0);
+            tileTmp.transform.position = spawnedFloorTiles[spawnedFloorTiles.Count - 1].endPoint.position - tileTmp2.startPoint.localPosition;
             //tileTmp.ActivateRandomObstacle();
-            spawnedTiles.Add(tileTmp);
+            spawnedFloorTiles.Add(tileTmp);
         }
 
         if (gameOver || !gameStarted)
