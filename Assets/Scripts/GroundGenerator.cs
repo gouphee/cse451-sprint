@@ -96,8 +96,9 @@ public class GroundGenerator : MonoBehaviour
             score += Time.deltaTime * movingSpeed;
         }
 
-        if (mainCamera.WorldToViewportPoint(spawnedFloorTiles[0].endPoint.position).z < 0)
+        if (mainCamera.WorldToViewportPoint(spawnedFloorTiles[0].endPoint.position).z < -25)
         {
+            
             //Move the tile to the front if it's behind the Camera
             System.Random random = new System.Random();
             int randomNumber = random.Next(0, tiles.Length);
