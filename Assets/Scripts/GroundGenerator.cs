@@ -96,19 +96,21 @@ public class GroundGenerator : MonoBehaviour
             score += Time.deltaTime * movingSpeed;
         }
 
-        if (mainCamera.WorldToViewportPoint(spawnedFloorTiles[0].endPoint.position).z < -25)
+        if (mainCamera.WorldToViewportPoint(spawnedFloorTiles[0].endPoint.position).z < -5)
         {
-            
-            //Move the tile to the front if it's behind the Camera
+            // Generates new tile
             System.Random random = new System.Random();
             int randomNumber = random.Next(0, tiles.Length);
             PlatformTile tileTmp = Instantiate(tiles[randomNumber], floorStartPoint.position, Quaternion.identity) as PlatformTile;
             PlatformTile tileTmp2 = spawnedFloorTiles[0];
 
+            // Removes tile in spawned floor tiles and adds new one at the position of 
             spawnedFloorTiles.RemoveAt(0);
             tileTmp.transform.position = spawnedFloorTiles[spawnedFloorTiles.Count - 1].endPoint.position - tileTmp2.startPoint.localPosition;
             //tileTmp.ActivateRandomObstacle();
+            tileTmp.transform.SetParent(transform);
             spawnedFloorTiles.Add(tileTmp);
+            print(spawnedFloorTiles.Count);
         }
 
         if (gameOver || !gameStarted)
