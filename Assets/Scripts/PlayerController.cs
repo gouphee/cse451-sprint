@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
     // Outlets
     private Rigidbody _rb;
     
+    // State Tracking
+    public bool canJump;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +37,30 @@ public class PlayerController : MonoBehaviour
         //Jump!
         if (Input.GetKey(KeyCode.Space))
         {
-            _rb.AddForce(Vector3.up * 0.05f, ForceMode.Impulse);
+            if (canJump)
+            {
+                canJump = false;
+                _rb.AddForce(Vector3.up * 10.0f, ForceMode.Impulse);
+            }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collisionInfo)
+    {
+        if (collisionInfo.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            RaycastHit[] hits = Physics.RaycastAll(transform.position, Vector3.down, 1.2f);
+            Debug.DrawRay(transform.position, Vector3.down * 1.2f);
+
+            for (int i = 0; i < hits.Length; i++)
+            {
+                RaycastHit hit = hits[i];
+
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                {
+                    canJump = true;
+                }
+            }
         }
     }
 }

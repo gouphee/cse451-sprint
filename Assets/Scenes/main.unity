@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -826,7 +826,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1547847113}
   - component: {fileID: 1547847112}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: _GroundGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -983,3 +983,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f997c8178f2741c489fd079ab654d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canJump: 0
