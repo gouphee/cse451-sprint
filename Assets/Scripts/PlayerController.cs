@@ -26,12 +26,12 @@ public class PlayerController : MonoBehaviour
         //Move left or right based on player inputs
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            _rb.AddForce(Vector3.left * 15f * Time.deltaTime, ForceMode.Impulse);
+            _rb.AddForce(Vector3.left * 35f * Time.deltaTime, ForceMode.Impulse);
         }
 
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            _rb.AddForce(Vector3.right * 15f * Time.deltaTime, ForceMode.Impulse);
+            _rb.AddForce(Vector3.right * 35f * Time.deltaTime, ForceMode.Impulse);
         }
 
         //Jump!
