@@ -7,10 +7,10 @@ public class PlayerController : MonoBehaviour
 {
     // Outlets
     private Rigidbody _rb;
-    
+
     // State Tracking
     public bool canJump;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     {
         // Always move forward!
         _rb.AddForce(Vector3.forward * 5f * Time.deltaTime, ForceMode.Impulse);
-        
+
         //Move left or right based on player inputs
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
@@ -33,24 +33,26 @@ public class PlayerController : MonoBehaviour
         {
             _rb.AddForce(Vector3.right * 15f * Time.deltaTime, ForceMode.Impulse);
         }
-        
+
         //Jump!
         if (Input.GetKey(KeyCode.Space))
         {
             if (canJump)
             {
                 canJump = false;
-                _rb.AddForce(Vector3.up * 10.0f, ForceMode.Impulse);
+                _rb.AddForce(Vector3.up * 6.0f, ForceMode.Impulse);
             }
         }
+        
+        Debug.DrawRay(transform.position, Vector3.down * 1.2f, Color.red);
     }
 
-    private void OnCollisionEnter(Collision collisionInfo)
+
+    public void OnCollisionStay(Collision collision)
     {
-        if (collisionInfo.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             RaycastHit[] hits = Physics.RaycastAll(transform.position, Vector3.down, 1.2f);
-            Debug.DrawRay(transform.position, Vector3.down * 1.2f);
 
             for (int i = 0; i < hits.Length; i++)
             {
