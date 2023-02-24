@@ -15,6 +15,8 @@ public class GroundGenerator : MonoBehaviour
     public int tilesToPreSpawn = 1; //How many tiles should be pre-spawned
     public int tilesWithoutObstacles = 3; //How many tiles at the beginning should not have obstacles, good for warm-up
 
+    List<Vector3> spawnPoints = new List<Vector3>();
+
     List<PlatformTile> spawnedFloorTiles = new List<PlatformTile>();
     List<PlatformTile> spawnedCeilingTiles = new List<PlatformTile>();
     List<PlatformTile> spawnedLeftWallTiles = new List<PlatformTile>();
@@ -38,7 +40,10 @@ public class GroundGenerator : MonoBehaviour
         Vector3 leftWallSpawnPosition = leftWallStartPoint.position;
         Vector3 rightWallSpawnPosition = rightWallStartPoint.position;
 
-
+        spawnPoints.Add(floorSpawnPosition);
+        spawnPoints.Add(ceilingSpawnPosition); 
+        spawnPoints.Add(leftWallSpawnPosition);
+        spawnPoints.Add(rightWallSpawnPosition);
 
         
         int tilesWithNoObstaclesTmp = tilesWithoutObstacles;
@@ -98,19 +103,60 @@ public class GroundGenerator : MonoBehaviour
 
         if (mainCamera.WorldToViewportPoint(spawnedFloorTiles[0].endPoint.position).z < -5)
         {
-            // Generates new tile
             System.Random random = new System.Random();
             int randomNumber = random.Next(0, tiles.Length);
             PlatformTile tileTmp = Instantiate(tiles[randomNumber], floorStartPoint.position, Quaternion.identity) as PlatformTile;
-            PlatformTile tileTmp2 = spawnedFloorTiles[0];
+            Vector3 prevPos = spawnedFloorTiles[0].startPoint.localPosition;
 
             // Removes tile in spawned floor tiles and adds new one at the position of 
+            Destroy(spawnedFloorTiles[0].gameObject);
             spawnedFloorTiles.RemoveAt(0);
-            tileTmp.transform.position = spawnedFloorTiles[spawnedFloorTiles.Count - 1].endPoint.position - tileTmp2.startPoint.localPosition;
+            tileTmp.transform.position = spawnedFloorTiles[spawnedFloorTiles.Count - 1].endPoint.position - prevPos;
             //tileTmp.ActivateRandomObstacle();
             tileTmp.transform.SetParent(transform);
             spawnedFloorTiles.Add(tileTmp);
-            print(spawnedFloorTiles.Count);
+
+            random = new System.Random();
+            randomNumber = random.Next(0, tiles.Length);
+            tileTmp = Instantiate(tiles[randomNumber], ceilingStartPoint.position, Quaternion.identity) as PlatformTile;
+            prevPos = spawnedCeilingTiles[0].startPoint.localPosition;
+
+            // Removes tile in spawned floor tiles and adds new one at the position of 
+            Destroy(spawnedCeilingTiles[0].gameObject);
+            spawnedCeilingTiles.RemoveAt(0);
+            tileTmp.transform.position = spawnedCeilingTiles[spawnedCeilingTiles.Count - 1].endPoint.position - prevPos;
+            //tileTmp.ActivateRandomObstacle();
+            tileTmp.transform.SetParent(transform);
+            spawnedCeilingTiles.Add(tileTmp);
+
+            random = new System.Random();
+            randomNumber = random.Next(0, tiles.Length);
+            tileTmp = Instantiate(tiles[randomNumber], leftWallStartPoint.position, Quaternion.identity) as PlatformTile;
+            prevPos = spawnedLeftWallTiles[0].startPoint.localPosition;
+
+            // Removes tile in spawned floor tiles and adds new one at the position of 
+            Destroy(spawnedLeftWallTiles[0].gameObject);
+            spawnedLeftWallTiles.RemoveAt(0);
+            tileTmp.transform.Rotate(0f, 0f, 90f);
+            tileTmp.transform.position = spawnedLeftWallTiles[spawnedLeftWallTiles.Count - 1].endPoint.position - prevPos;
+            //tileTmp.ActivateRandomObstacle();
+            tileTmp.transform.SetParent(transform);
+            spawnedLeftWallTiles.Add(tileTmp);
+
+            random = new System.Random();
+            randomNumber = random.Next(0, tiles.Length);
+            tileTmp = Instantiate(tiles[randomNumber], rightWallStartPoint.position, Quaternion.identity) as PlatformTile;
+            prevPos = spawnedRightWallTiles[0].startPoint.localPosition;
+
+            // Removes tile in spawned floor tiles and adds new one at the position of 
+            Destroy(spawnedRightWallTiles[0].gameObject);
+            spawnedRightWallTiles.RemoveAt(0);
+            tileTmp.transform.Rotate(0f, 0f, 90f);
+
+            tileTmp.transform.position = spawnedRightWallTiles[spawnedRightWallTiles.Count - 1].endPoint.position - prevPos;
+            //tileTmp.ActivateRandomObstacle();
+            tileTmp.transform.SetParent(transform);
+            spawnedRightWallTiles.Add(tileTmp);
         }
 
         if (gameOver || !gameStarted)
