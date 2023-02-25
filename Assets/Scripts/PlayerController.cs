@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     // State Tracking
     public bool canJump;
 
+    public GroundGenerator ground;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +50,8 @@ public class PlayerController : MonoBehaviour
         //Debug.DrawRay(transform.position, Vector3.down * 1.2f, Color.red);
         if (_rb.position.y <= -25)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            ground.gameOver = true;
         }
     }
 

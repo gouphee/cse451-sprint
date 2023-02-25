@@ -23,7 +23,7 @@ public class GroundGenerator : MonoBehaviour
     List<PlatformTile> spawnedRightWallTiles = new List<PlatformTile>();
 
     int nextTileToActivate = -1;
-    [HideInInspector]
+    // [HideInInspector]
     public bool gameOver = false;
     static bool gameStarted = false;
     float score = 0;
