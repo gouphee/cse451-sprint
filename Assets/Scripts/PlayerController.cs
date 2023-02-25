@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -44,7 +45,11 @@ public class PlayerController : MonoBehaviour
             }
         }
         
-        Debug.DrawRay(transform.position, Vector3.down * 1.2f, Color.red);
+        //Debug.DrawRay(transform.position, Vector3.down * 1.2f, Color.red);
+        if (_rb.position.y <= -25)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
 
