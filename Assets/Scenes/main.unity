@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -924,7 +924,7 @@ MonoBehaviour:
   - {fileID: 759570072446112773, guid: 62548b9786885c04c983375e716ad266, type: 3}
   - {fileID: 759570072446112773, guid: ffd352f7c918a91458665e810729aa8f, type: 3}
   - {fileID: 759570072446112773, guid: 1f17a7324b99dd346a1325e37e4b3aba, type: 3}
-  - {fileID: 759570072446112773, guid: 1e620fc140c3079428b322ee634d0511, type: 3}
+  - {fileID: 759570072446112773, guid: 23829dfd8396b6e45b381feb0951cb2f, type: 3}
   movingSpeed: 12
   tilesToPreSpawn: 20
   tilesWithoutObstacles: 3
