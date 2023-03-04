@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,6 +29,12 @@ public class GroundGenerator : MonoBehaviour
     public bool gameOver = false;
     static bool gameStarted = false;
     float score = 0;
+
+    private bool topGap = false;
+    private bool bottomGap = false;
+    private bool leftGap = false;
+    private bool rightGap = false;
+
 
     public static GroundGenerator instance;
 
@@ -99,64 +107,165 @@ public class GroundGenerator : MonoBehaviour
         {
             transform.Translate(-spawnedFloorTiles[0].transform.forward * Time.deltaTime * (movingSpeed + (score / 500)), Space.World);
             score += Time.deltaTime * movingSpeed;
+            
         }
 
         if (mainCamera.WorldToViewportPoint(spawnedFloorTiles[0].endPoint.position).z < -5)
         {
-            System.Random random = new System.Random();
-            int randomNumber = random.Next(0, tiles.Length);
-            PlatformTile tileTmp = Instantiate(tiles[randomNumber], floorStartPoint.position, Quaternion.identity) as PlatformTile;
-            Vector3 prevPos = spawnedFloorTiles[0].startPoint.localPosition;
+            System.Random random;
+            int randomNumber;
+            PlatformTile tileTmp;
+            Vector3 prevPos;
+            if (!bottomGap)
+            {
+                random = new System.Random();
+                randomNumber = random.Next(0, 20);
+                if (randomNumber == 0)
+                {
+                    StartCoroutine(botWallGap());
+                }
+            }
+            if (!topGap)
+            {
+                random = new System.Random();
+                randomNumber = random.Next(0, 20);
+                if (randomNumber == 0)
+                {
+                    StartCoroutine(topWallGap());
+                }
+            }
+            if (!leftGap)
+            {
+                random = new System.Random();
+                randomNumber = random.Next(0, 20);
+                if (randomNumber == 0)
+                {
+                    StartCoroutine(leftWallGap());
+                }
+            }
+            if (!rightGap)
+            {
+                random = new System.Random();
+                randomNumber = random.Next(0, 20);
+                if (randomNumber == 0)
+                {
+                    StartCoroutine(rightWallGap());
+                }
+            }
+            if (bottomGap)
+            {
+                tileTmp = Instantiate(tiles[1], floorStartPoint.position, Quaternion.identity) as PlatformTile;
+                prevPos = spawnedFloorTiles[0].startPoint.localPosition;
 
-            // Removes tile in spawned floor tiles and adds new one at the position of 
-            Destroy(spawnedFloorTiles[0].gameObject);
-            spawnedFloorTiles.RemoveAt(0);
-            tileTmp.transform.position = spawnedFloorTiles[spawnedFloorTiles.Count - 1].endPoint.position - prevPos;
-            //tileTmp.ActivateRandomObstacle();
-            tileTmp.transform.SetParent(transform);
-            spawnedFloorTiles.Add(tileTmp);
+                // Removes tile in spawned floor tiles and adds new one at the position of 
+                Destroy(spawnedFloorTiles[0].gameObject);
+                spawnedFloorTiles.RemoveAt(0);
+                tileTmp.transform.position = spawnedFloorTiles[spawnedFloorTiles.Count - 1].endPoint.position - prevPos;
+                //tileTmp.ActivateRandomObstacle();
+                tileTmp.transform.SetParent(transform);
+                spawnedFloorTiles.Add(tileTmp);
+            } else
+            {
+                random = new System.Random();
+                randomNumber = random.Next(0, tiles.Length);
+                tileTmp = Instantiate(tiles[randomNumber], floorStartPoint.position, Quaternion.identity) as PlatformTile;
+                prevPos = spawnedFloorTiles[0].startPoint.localPosition;
 
-            random = new System.Random();
-            randomNumber = random.Next(0, tiles.Length);
-            tileTmp = Instantiate(tiles[randomNumber], ceilingStartPoint.position, Quaternion.identity) as PlatformTile;
-            prevPos = spawnedCeilingTiles[0].startPoint.localPosition;
+                // Removes tile in spawned floor tiles and adds new one at the position of 
+                Destroy(spawnedFloorTiles[0].gameObject);
+                spawnedFloorTiles.RemoveAt(0);
+                tileTmp.transform.position = spawnedFloorTiles[spawnedFloorTiles.Count - 1].endPoint.position - prevPos;
+                //tileTmp.ActivateRandomObstacle();
+                tileTmp.transform.SetParent(transform);
+                spawnedFloorTiles.Add(tileTmp);
+            }
+            if (topGap)
+            {
+                tileTmp = Instantiate(tiles[1], ceilingStartPoint.position, Quaternion.identity) as PlatformTile;
+                prevPos = spawnedCeilingTiles[0].startPoint.localPosition;
 
-            // Removes tile in spawned floor tiles and adds new one at the position of 
-            Destroy(spawnedCeilingTiles[0].gameObject);
-            spawnedCeilingTiles.RemoveAt(0);
-            tileTmp.transform.position = spawnedCeilingTiles[spawnedCeilingTiles.Count - 1].endPoint.position - prevPos;
-            //tileTmp.ActivateRandomObstacle();
-            tileTmp.transform.SetParent(transform);
-            spawnedCeilingTiles.Add(tileTmp);
+                // Removes tile in spawned floor tiles and adds new one at the position of 
+                Destroy(spawnedCeilingTiles[0].gameObject);
+                spawnedCeilingTiles.RemoveAt(0);
+                tileTmp.transform.position = spawnedCeilingTiles[spawnedCeilingTiles.Count - 1].endPoint.position - prevPos;
+                //tileTmp.ActivateRandomObstacle();
+                tileTmp.transform.SetParent(transform);
+                spawnedCeilingTiles.Add(tileTmp);
+            } else
+            {
+                random = new System.Random();
+                randomNumber = random.Next(0, tiles.Length);
+                tileTmp = Instantiate(tiles[randomNumber], ceilingStartPoint.position, Quaternion.identity) as PlatformTile;
+                prevPos = spawnedCeilingTiles[0].startPoint.localPosition;
 
-            random = new System.Random();
-            randomNumber = random.Next(0, tiles.Length);
-            tileTmp = Instantiate(tiles[randomNumber], leftWallStartPoint.position, Quaternion.identity) as PlatformTile;
-            prevPos = spawnedLeftWallTiles[0].startPoint.localPosition;
+                // Removes tile in spawned floor tiles and adds new one at the position of 
+                Destroy(spawnedCeilingTiles[0].gameObject);
+                spawnedCeilingTiles.RemoveAt(0);
+                tileTmp.transform.position = spawnedCeilingTiles[spawnedCeilingTiles.Count - 1].endPoint.position - prevPos;
+                //tileTmp.ActivateRandomObstacle();
+                tileTmp.transform.SetParent(transform);
+                spawnedCeilingTiles.Add(tileTmp);
+            }
+            if (leftGap)
+            {
+                tileTmp = Instantiate(tiles[1], leftWallStartPoint.position, Quaternion.identity) as PlatformTile;
+                prevPos = spawnedLeftWallTiles[0].startPoint.localPosition;
 
-            // Removes tile in spawned floor tiles and adds new one at the position of 
-            Destroy(spawnedLeftWallTiles[0].gameObject);
-            spawnedLeftWallTiles.RemoveAt(0);
-            tileTmp.transform.Rotate(0f, 0f, 90f);
-            tileTmp.transform.position = spawnedLeftWallTiles[spawnedLeftWallTiles.Count - 1].endPoint.position - prevPos;
-            //tileTmp.ActivateRandomObstacle();
-            tileTmp.transform.SetParent(transform);
-            spawnedLeftWallTiles.Add(tileTmp);
+                // Removes tile in spawned floor tiles and adds new one at the position of 
+                Destroy(spawnedLeftWallTiles[0].gameObject);
+                spawnedLeftWallTiles.RemoveAt(0);
+                tileTmp.transform.Rotate(0f, 0f, 90f);
+                tileTmp.transform.position = spawnedLeftWallTiles[spawnedLeftWallTiles.Count - 1].endPoint.position - prevPos;
+                //tileTmp.ActivateRandomObstacle();
+                tileTmp.transform.SetParent(transform);
+                spawnedLeftWallTiles.Add(tileTmp);
+            } else
+            {
+                random = new System.Random();
+                randomNumber = random.Next(0, tiles.Length);
+                tileTmp = Instantiate(tiles[randomNumber], leftWallStartPoint.position, Quaternion.identity) as PlatformTile;
+                prevPos = spawnedLeftWallTiles[0].startPoint.localPosition;
 
-            random = new System.Random();
-            randomNumber = random.Next(0, tiles.Length);
-            tileTmp = Instantiate(tiles[randomNumber], rightWallStartPoint.position, Quaternion.identity) as PlatformTile;
-            prevPos = spawnedRightWallTiles[0].startPoint.localPosition;
+                // Removes tile in spawned floor tiles and adds new one at the position of 
+                Destroy(spawnedLeftWallTiles[0].gameObject);
+                spawnedLeftWallTiles.RemoveAt(0);
+                tileTmp.transform.Rotate(0f, 0f, 90f);
+                tileTmp.transform.position = spawnedLeftWallTiles[spawnedLeftWallTiles.Count - 1].endPoint.position - prevPos;
+                //tileTmp.ActivateRandomObstacle();
+                tileTmp.transform.SetParent(transform);
+                spawnedLeftWallTiles.Add(tileTmp);
+            }
+            if (rightGap)
+            {
+                tileTmp = Instantiate(tiles[1], rightWallStartPoint.position, Quaternion.identity) as PlatformTile;
+                prevPos = spawnedRightWallTiles[0].startPoint.localPosition;
 
-            // Removes tile in spawned floor tiles and adds new one at the position of 
-            Destroy(spawnedRightWallTiles[0].gameObject);
-            spawnedRightWallTiles.RemoveAt(0);
-            tileTmp.transform.Rotate(0f, 0f, 90f);
+                // Removes tile in spawned floor tiles and adds new one at the position of 
+                Destroy(spawnedRightWallTiles[0].gameObject);
+                spawnedRightWallTiles.RemoveAt(0);
+                tileTmp.transform.Rotate(0f, 0f, 90f);
 
-            tileTmp.transform.position = spawnedRightWallTiles[spawnedRightWallTiles.Count - 1].endPoint.position - prevPos;
-            //tileTmp.ActivateRandomObstacle();
-            tileTmp.transform.SetParent(transform);
-            spawnedRightWallTiles.Add(tileTmp);
+                tileTmp.transform.position = spawnedRightWallTiles[spawnedRightWallTiles.Count - 1].endPoint.position - prevPos;
+                //tileTmp.ActivateRandomObstacle();
+                tileTmp.transform.SetParent(transform);
+                spawnedRightWallTiles.Add(tileTmp);
+            } else
+            {
+                random = new System.Random();
+                randomNumber = random.Next(0, tiles.Length);
+                tileTmp = Instantiate(tiles[randomNumber], rightWallStartPoint.position, Quaternion.identity) as PlatformTile;
+                prevPos = spawnedRightWallTiles[0].startPoint.localPosition;
+
+                // Removes tile in spawned floor tiles and adds new one at the position of 
+                Destroy(spawnedRightWallTiles[0].gameObject);
+                spawnedRightWallTiles.RemoveAt(0);
+                tileTmp.transform.Rotate(0f, 0f, 90f);
+
+                tileTmp.transform.position = spawnedRightWallTiles[spawnedRightWallTiles.Count - 1].endPoint.position - prevPos;
+                //tileTmp.ActivateRandomObstacle();
+                tileTmp.transform.SetParent(transform);
+                spawnedRightWallTiles.Add(tileTmp);
+            }
         }
 
         if (gameOver || !gameStarted)
@@ -176,6 +285,34 @@ public class GroundGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    private IEnumerator botWallGap()
+    {
+        bottomGap = true;
+        yield return new WaitForSeconds(2f);
+        bottomGap = false;
+    }
+
+    private IEnumerator topWallGap()
+    {
+        topGap = true;
+        yield return new WaitForSeconds(2f);
+        topGap = false;
+    }
+
+    private IEnumerator leftWallGap()
+    {
+        leftGap = true;
+        yield return new WaitForSeconds(2f);
+        leftGap = false;
+    }
+
+    private IEnumerator rightWallGap()
+    {
+        rightGap = true;
+        yield return new WaitForSeconds(2f);
+        rightGap = false;
     }
 
     void OnGUI()

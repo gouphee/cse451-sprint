@@ -859,6 +859,8 @@ MonoBehaviour:
   - {fileID: 759570072446112773, guid: ffd352f7c918a91458665e810729aa8f, type: 3}
   - {fileID: 759570072446112773, guid: 1f17a7324b99dd346a1325e37e4b3aba, type: 3}
   - {fileID: 759570072446112773, guid: 23829dfd8396b6e45b381feb0951cb2f, type: 3}
+  - {fileID: 759570072446112773, guid: f2b0e4cdd43ca404da0be527ca4b40b8, type: 3}
+  - {fileID: 759570072446112773, guid: 3ff8827eb2af40c4a88019b1cae0cda7, type: 3}
   movingSpeed: 12
   tilesToPreSpawn: 20
   tilesWithoutObstacles: 3
