@@ -61,14 +61,46 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             RaycastHit[] hits = Physics.RaycastAll(transform.position, Vector3.down, 1.2f);
+            Debug.DrawRay(transform.position, Vector3.down * 1.2f);
 
-            for (int i = 0; i < hits.Length; i++)
+            if (hits.Length > 0)
             {
-                RaycastHit hit = hits[i];
-
-                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                for (int i = 0; i < hits.Length; i++)
                 {
-                    canJump = true;
+                    RaycastHit hit = hits[i];
+
+                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                    {
+                        canJump = true;
+                    }
+                }
+            }
+
+            RaycastHit[] leftHits = Physics.RaycastAll(transform.position, Vector3.left, 0.6f);
+            RaycastHit[] rightHits = Physics.RaycastAll(transform.position, Vector3.right, 0.6f);
+            if (leftHits.Length > 0)
+            {
+                for (int i = 0; i < leftHits.Length; i++)
+                {
+                    RaycastHit hit = leftHits[i];
+
+                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                    {
+                        Physics.gravity = new Vector3(-9.8f, 0, 0);
+                    }
+                }
+            }
+
+            if (rightHits.Length > 0)
+            {
+                for (int i = 0; i < rightHits.Length; i++)
+                {
+                    RaycastHit hit = rightHits[i];
+
+                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                    {
+                        Physics.gravity = new Vector3(9.8f, 0, 0);
+                    }
                 }
             }
         }
