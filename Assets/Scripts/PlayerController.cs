@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        Physics.gravity = currentGravityDirection * 24f;
     }
 
     // Update is called once per frame
