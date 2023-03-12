@@ -84,7 +84,15 @@ public class PlayerController : MonoBehaviour
         }
         
         //Debug.DrawRay(transform.position, Vector3.down * 1.2f, Color.red);
-        if (_rb.position.y <= -25)
+        float x = _rb.position.x;
+        float y = _rb.position.y;
+        
+        if (_rb.position.y <= -25 || _rb.position.y >= 25)
+        {
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            ground.gameOver = true;
+        }
+        if (_rb.position.x <= -25 || _rb.position.x >= 25)
         {
             //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             ground.gameOver = true;
