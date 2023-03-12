@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,6 +16,8 @@ public class PlayerController : MonoBehaviour
     public bool canJump;
 
     public GroundGenerator ground;
+
+    private Vector3 currentGravityDirection = Vector3.down;
 
     // Start is called before the first frame update
     void Start()
@@ -29,12 +34,43 @@ public class PlayerController : MonoBehaviour
         //Move left or right based on player inputs
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            _rb.AddForce(Vector3.left * 35f * Time.deltaTime, ForceMode.Impulse);
+            if (currentGravityDirection == Vector3.down)
+            {
+                _rb.AddForce(Vector3.left * 35f * Time.deltaTime, ForceMode.Impulse);
+            } 
+            else if (currentGravityDirection == Vector3.left)
+            {
+                _rb.AddForce(Vector3.up * 35f * Time.deltaTime, ForceMode.Impulse);
+            }
+            else if (currentGravityDirection == Vector3.right)
+            {
+                _rb.AddForce(Vector3.down * 35f * Time.deltaTime, ForceMode.Impulse);
+            }
+            else if (currentGravityDirection == Vector3.up)
+            {
+                _rb.AddForce(Vector3.right * 35f * Time.deltaTime, ForceMode.Impulse);
+            }
         }
 
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            _rb.AddForce(Vector3.right * 35f * Time.deltaTime, ForceMode.Impulse);
+            if (currentGravityDirection == Vector3.down)
+            {
+                _rb.AddForce(Vector3.right * 35f * Time.deltaTime, ForceMode.Impulse);
+            } 
+            else if (currentGravityDirection == Vector3.left)
+            {
+                _rb.AddForce(Vector3.down * 35f * Time.deltaTime, ForceMode.Impulse);
+            }
+            else if (currentGravityDirection == Vector3.right)
+            {
+                _rb.AddForce(Vector3.up * 35f * Time.deltaTime, ForceMode.Impulse);
+            }
+            else if (currentGravityDirection == Vector3.up)
+            {
+                _rb.AddForce(Vector3.left * 35f * Time.deltaTime, ForceMode.Impulse);
+            }
+
         }
 
         //Jump!
@@ -43,7 +79,7 @@ public class PlayerController : MonoBehaviour
             if (canJump)
             {
                 canJump = false;
-                _rb.AddForce(Vector3.up * 6.0f, ForceMode.Impulse);
+                _rb.AddForce(-currentGravityDirection * 6.0f, ForceMode.Impulse);
             }
         }
         
@@ -60,8 +96,8 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            RaycastHit[] hits = Physics.RaycastAll(transform.position, Vector3.down, 1.2f);
-            Debug.DrawRay(transform.position, Vector3.down * 1.2f);
+            RaycastHit[] hits = Physics.RaycastAll(transform.position, currentGravityDirection, 1.2f);
+            Debug.DrawRay(transform.position, currentGravityDirection * 1.2f, Color.red);
 
             if (hits.Length > 0)
             {
@@ -76,8 +112,36 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            RaycastHit[] leftHits = Physics.RaycastAll(transform.position, Vector3.left, 0.6f);
-            RaycastHit[] rightHits = Physics.RaycastAll(transform.position, Vector3.right, 0.6f);
+            Vector3 currentLeft = Vector3.left;
+            if (currentGravityDirection == Vector3.left)
+            {
+                currentLeft = Vector3.up;
+            }
+            else if (currentGravityDirection == Vector3.right)
+            {
+                currentLeft = Vector3.down;
+            }
+            else if (currentGravityDirection == Vector3.up)
+            {
+                currentLeft = Vector3.right;
+            }
+
+            Vector3 currentRight = Vector3.right;
+            if (currentGravityDirection == Vector3.left)
+            {
+                currentRight = Vector3.down;
+            }
+            else if (currentGravityDirection == Vector3.right)
+            {
+                currentRight = Vector3.up;
+            }
+            else if (currentGravityDirection == Vector3.up)
+            {
+                currentRight = Vector3.left;
+            }
+            
+            RaycastHit[] leftHits = Physics.RaycastAll(transform.position, currentLeft, 0.6f);
+            RaycastHit[] rightHits = Physics.RaycastAll(transform.position, currentRight, 0.6f);
             if (leftHits.Length > 0)
             {
                 for (int i = 0; i < leftHits.Length; i++)
@@ -86,7 +150,9 @@ public class PlayerController : MonoBehaviour
 
                     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                     {
-                        Physics.gravity = new Vector3(-9.8f, 0, 0);
+                        currentGravityDirection = Quaternion.AngleAxis(-90, Vector3.forward) * currentGravityDirection;
+                        Physics.gravity = currentGravityDirection * 24f;
+                        _rb.transform.Rotate(new Vector3(0, 0, 1), -90);
                     }
                 }
             }
@@ -99,7 +165,9 @@ public class PlayerController : MonoBehaviour
 
                     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                     {
-                        Physics.gravity = new Vector3(9.8f, 0, 0);
+                        currentGravityDirection = Quaternion.AngleAxis(90, Vector3.forward) * currentGravityDirection;
+                        Physics.gravity = currentGravityDirection * 24f;
+                        _rb.transform.Rotate(new Vector3(0, 0, 1), 90);
                     }
                 }
             }
