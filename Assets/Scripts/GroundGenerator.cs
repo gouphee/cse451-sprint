@@ -116,7 +116,7 @@ public class GroundGenerator : MonoBehaviour
             int randomNumber;
             PlatformTile tileTmp;
             Vector3 prevPos;
-            if (!bottomGap)
+            if (!bottomGap && (!rightGap || !leftGap))
             {
                 random = new System.Random();
                 randomNumber = random.Next(0, 20);
@@ -125,7 +125,7 @@ public class GroundGenerator : MonoBehaviour
                     StartCoroutine(botWallGap());
                 }
             }
-            if (!topGap)
+            if (!topGap && (!rightGap || !leftGap))
             {
                 random = new System.Random();
                 randomNumber = random.Next(0, 20);
@@ -134,7 +134,7 @@ public class GroundGenerator : MonoBehaviour
                     StartCoroutine(topWallGap());
                 }
             }
-            if (!leftGap)
+            if (!leftGap && (!bottomGap || !topGap))
             {
                 random = new System.Random();
                 randomNumber = random.Next(0, 20);
@@ -143,7 +143,7 @@ public class GroundGenerator : MonoBehaviour
                     StartCoroutine(leftWallGap());
                 }
             }
-            if (!rightGap)
+            if (!rightGap && (!bottomGap || !topGap))
             {
                 random = new System.Random();
                 randomNumber = random.Next(0, 20);
