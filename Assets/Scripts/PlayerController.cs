@@ -14,9 +14,7 @@ public class PlayerController : MonoBehaviour
 
     // State Tracking
     public bool canJump;
-
     public GroundGenerator ground;
-
     private Vector3 currentGravityDirection = Vector3.down;
 
     // Start is called before the first frame update
@@ -35,43 +33,11 @@ public class PlayerController : MonoBehaviour
         //Move left or right based on player inputs
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            if (currentGravityDirection == Vector3.down)
-            {
-                _rb.AddForce(Vector3.left * 35f * Time.deltaTime, ForceMode.Impulse);
-            } 
-            else if (currentGravityDirection == Vector3.left)
-            {
-                _rb.AddForce(Vector3.up * 35f * Time.deltaTime, ForceMode.Impulse);
-            }
-            else if (currentGravityDirection == Vector3.right)
-            {
-                _rb.AddForce(Vector3.down * 35f * Time.deltaTime, ForceMode.Impulse);
-            }
-            else if (currentGravityDirection == Vector3.up)
-            {
-                _rb.AddForce(Vector3.right * 35f * Time.deltaTime, ForceMode.Impulse);
-            }
+            _rb.AddForce((Quaternion.AngleAxis(-90, Vector3.forward) * currentGravityDirection) * 35f * Time.deltaTime, ForceMode.Impulse);
         }
-
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            if (currentGravityDirection == Vector3.down)
-            {
-                _rb.AddForce(Vector3.right * 35f * Time.deltaTime, ForceMode.Impulse);
-            } 
-            else if (currentGravityDirection == Vector3.left)
-            {
-                _rb.AddForce(Vector3.down * 35f * Time.deltaTime, ForceMode.Impulse);
-            }
-            else if (currentGravityDirection == Vector3.right)
-            {
-                _rb.AddForce(Vector3.up * 35f * Time.deltaTime, ForceMode.Impulse);
-            }
-            else if (currentGravityDirection == Vector3.up)
-            {
-                _rb.AddForce(Vector3.left * 35f * Time.deltaTime, ForceMode.Impulse);
-            }
-
+            _rb.AddForce((Quaternion.AngleAxis(90, Vector3.forward) * currentGravityDirection) * 35f * Time.deltaTime, ForceMode.Impulse);
         }
 
         //Jump!
@@ -83,19 +49,16 @@ public class PlayerController : MonoBehaviour
                 _rb.AddForce(-currentGravityDirection * 6.0f, ForceMode.Impulse);
             }
         }
-        
-        //Debug.DrawRay(transform.position, Vector3.down * 1.2f, Color.red);
+
         float x = _rb.position.x;
         float y = _rb.position.y;
         
-        if (_rb.position.y <= -25 || _rb.position.y >= 25)
+        if (y <= -25 || y >= 25)
         {
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             ground.gameOver = true;
         }
-        if (_rb.position.x <= -25 || _rb.position.x >= 25)
+        if (x <= -25 || x >= 25)
         {
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             ground.gameOver = true;
         }
     }
@@ -117,6 +80,7 @@ public class PlayerController : MonoBehaviour
                     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                     {
                         canJump = true;
+                        break;
                     }
                 }
             }
@@ -159,9 +123,7 @@ public class PlayerController : MonoBehaviour
 
                     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                     {
-                        currentGravityDirection = Quaternion.AngleAxis(-90, Vector3.forward) * currentGravityDirection;
-                        Physics.gravity = currentGravityDirection * 24f;
-                        _rb.transform.Rotate(new Vector3(0, 0, 1), -90);
+                        RotateWorld(-90);
                     }
                 }
             }
@@ -174,12 +136,17 @@ public class PlayerController : MonoBehaviour
 
                     if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                     {
-                        currentGravityDirection = Quaternion.AngleAxis(90, Vector3.forward) * currentGravityDirection;
-                        Physics.gravity = currentGravityDirection * 24f;
-                        _rb.transform.Rotate(new Vector3(0, 0, 1), 90);
+                        RotateWorld(90);
                     }
                 }
             }
         }
+    }
+
+    void RotateWorld(int angle)
+    {
+        currentGravityDirection = Quaternion.AngleAxis(angle, Vector3.forward) * currentGravityDirection;
+        Physics.gravity = currentGravityDirection * 24f;
+        _rb.transform.Rotate(new Vector3(0, 0, 1), angle);
     }
 }
