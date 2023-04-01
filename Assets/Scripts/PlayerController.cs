@@ -14,14 +14,20 @@ public class PlayerController : MonoBehaviour
 
     // State Tracking
     public bool canJump;
+    public bool canSuperJump;
+    public bool canInvertGravity;
     public GroundGenerator ground;
     private Vector3 currentGravityDirection = Vector3.down;
+
 
     // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         Physics.gravity = currentGravityDirection * 24f;
+
+        StartCoroutine("ResetSuperJumpPowerup");
+        canInvertGravity = true;
     }
 
     // Update is called once per frame
@@ -49,6 +55,27 @@ public class PlayerController : MonoBehaviour
                 _rb.AddForce(-currentGravityDirection * 6.0f, ForceMode.Impulse);
             }
         }
+        
+        //Super jump!
+        if (Input.GetKey(KeyCode.W))
+        {
+            if (canSuperJump)
+            {
+                canSuperJump = false;
+                _rb.AddForce(-currentGravityDirection * 30.0f, ForceMode.Impulse);
+                StartCoroutine("ResetSuperJumpPowerup");
+            }
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            if (canInvertGravity)
+            {
+                canInvertGravity = false;
+                RotateWorld(180);
+                StartCoroutine("ResetInvertGravityPowerup");
+            }
+        }
 
         float x = _rb.position.x;
         float y = _rb.position.y;
@@ -63,6 +90,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    IEnumerator ResetInvertGravityPowerup()
+    {
+        yield return new WaitForSeconds(20);
+    
+        canInvertGravity = true;
+    }
+
+    IEnumerator ResetSuperJumpPowerup()
+    {
+        yield return new WaitForSeconds(5);
+
+        canSuperJump = true;
+    }
 
     public void OnCollisionStay(Collision collision)
     {
@@ -85,36 +125,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            Vector3 currentLeft = Vector3.left;
-            if (currentGravityDirection == Vector3.left)
-            {
-                currentLeft = Vector3.up;
-            }
-            else if (currentGravityDirection == Vector3.right)
-            {
-                currentLeft = Vector3.down;
-            }
-            else if (currentGravityDirection == Vector3.up)
-            {
-                currentLeft = Vector3.right;
-            }
-
-            Vector3 currentRight = Vector3.right;
-            if (currentGravityDirection == Vector3.left)
-            {
-                currentRight = Vector3.down;
-            }
-            else if (currentGravityDirection == Vector3.right)
-            {
-                currentRight = Vector3.up;
-            }
-            else if (currentGravityDirection == Vector3.up)
-            {
-                currentRight = Vector3.left;
-            }
+            Vector3 currentLeft = Quaternion.AngleAxis(-90, Vector3.forward) * currentGravityDirection;
+            Vector3 currentRight = Quaternion.AngleAxis(90, Vector3.forward) * currentGravityDirection;
+            Vector3 currentPosition = transform.position;
             
-            RaycastHit[] leftHits = Physics.RaycastAll(transform.position, currentLeft, 0.6f);
-            RaycastHit[] rightHits = Physics.RaycastAll(transform.position, currentRight, 0.6f);
+            RaycastHit[] leftHits = Physics.RaycastAll(currentPosition, currentLeft, 0.6f);
+            RaycastHit[] rightHits = Physics.RaycastAll(currentPosition, currentRight, 0.6f);
             if (leftHits.Length > 0)
             {
                 for (int i = 0; i < leftHits.Length; i++)
