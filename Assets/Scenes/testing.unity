@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -861,6 +861,11 @@ MonoBehaviour:
   - {fileID: 759570072446112773, guid: 23829dfd8396b6e45b381feb0951cb2f, type: 3}
   - {fileID: 759570072446112773, guid: f2b0e4cdd43ca404da0be527ca4b40b8, type: 3}
   - {fileID: 759570072446112773, guid: 3ff8827eb2af40c4a88019b1cae0cda7, type: 3}
+  materials:
+  - {fileID: 2100000, guid: cfbd27537ba745846ad5c953309514fd, type: 2}
+  - {fileID: 2100000, guid: bb4f11d4bc67c354dbf9c2f420f81d67, type: 2}
+  - {fileID: 2100000, guid: 26def5c7c332f114a819ec2df3a858a4, type: 2}
+  - {fileID: 2100000, guid: 3a33dd7a5fabe1c43ae6b0f96c57c6d9, type: 2}
   movingSpeed: 12
   tilesToPreSpawn: 20
   tilesWithoutObstacles: 3
@@ -986,4 +991,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canJump: 0
+  canSuperJump: 0
+  canInvertGravity: 0
   ground: {fileID: 1547847112}

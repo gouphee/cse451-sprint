@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Timers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class GroundGenerator : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class GroundGenerator : MonoBehaviour
     public Transform leftWallStartPoint;
     public Transform rightWallStartPoint;
     public PlatformTile[] tiles;
+    public Material[] materials;
     public float movingSpeed = 12;
     public int tilesToPreSpawn = 1; //How many tiles should be pre-spawned
     public int tilesWithoutObstacles = 3; //How many tiles at the beginning should not have obstacles, good for warm-up
@@ -67,6 +69,32 @@ public class GroundGenerator : MonoBehaviour
             PlatformTile spawnedCeilingTile = Instantiate(tiles[0], ceilingSpawnPosition, Quaternion.identity) as PlatformTile;
             PlatformTile spawnedLeftWallTile = Instantiate(tiles[0], rightWallSpawnPosition, Quaternion.identity) as PlatformTile;
             PlatformTile spawnedRightWallTile = Instantiate(tiles[0], leftWallSpawnPosition, Quaternion.identity) as PlatformTile;
+
+            GameObject cube = spawnedFloorTile.transform.Find("Cube").gameObject;
+            if (cube != null)
+            {
+
+                cube.GetComponent<MeshRenderer>().material = materials[0];
+            }
+            GameObject cube2 = spawnedCeilingTile.transform.Find("Cube").gameObject;
+            if (cube2 != null)
+            {
+
+                cube2.GetComponent<MeshRenderer>().material = materials[1];
+            }
+            GameObject cube3 = spawnedLeftWallTile.transform.Find("Cube").gameObject;
+            if (cube3 != null)
+            {
+
+                cube3.GetComponent<MeshRenderer>().material = materials[2];
+            }
+            GameObject cube4 = spawnedRightWallTile.transform.Find("Cube").gameObject;
+            if (cube4 != null)
+            {
+
+                cube4.GetComponent<MeshRenderer>().material = materials[3];
+            }
+
 
             spawnedLeftWallTile.transform.Rotate(0f, 0f, 90f);
             spawnedRightWallTile.transform.Rotate(0f, 0f, 90f);
@@ -177,6 +205,11 @@ public class GroundGenerator : MonoBehaviour
                 tileTmp.transform.position = spawnedFloorTiles[spawnedFloorTiles.Count - 1].endPoint.position - prevPos;
                 //tileTmp.ActivateRandomObstacle();
                 tileTmp.transform.SetParent(transform);
+                if (tileTmp.transform.childCount > 3)
+                {
+                    GameObject cube = tileTmp.transform.Find("Cube").gameObject;
+                    cube.GetComponent<MeshRenderer>().material = materials[0];
+                }
                 spawnedFloorTiles.Add(tileTmp);
             }
             if (topGap)
@@ -204,6 +237,12 @@ public class GroundGenerator : MonoBehaviour
                 tileTmp.transform.position = spawnedCeilingTiles[spawnedCeilingTiles.Count - 1].endPoint.position - prevPos;
                 //tileTmp.ActivateRandomObstacle();
                 tileTmp.transform.SetParent(transform);
+                if (tileTmp.transform.childCount > 3)
+
+                {
+                    GameObject cube = tileTmp.transform.Find("Cube").gameObject;
+                    cube.GetComponent<MeshRenderer>().material = materials[1];
+                }
                 spawnedCeilingTiles.Add(tileTmp);
             }
             if (leftGap)
@@ -233,6 +272,12 @@ public class GroundGenerator : MonoBehaviour
                 tileTmp.transform.position = spawnedLeftWallTiles[spawnedLeftWallTiles.Count - 1].endPoint.position - prevPos;
                 //tileTmp.ActivateRandomObstacle();
                 tileTmp.transform.SetParent(transform);
+                if (tileTmp.transform.childCount > 3)
+
+                {
+                    GameObject cube = tileTmp.transform.Find("Cube").gameObject;
+                    cube.GetComponent<MeshRenderer>().material = materials[2];
+                }
                 spawnedLeftWallTiles.Add(tileTmp);
             }
             if (rightGap)
@@ -264,6 +309,12 @@ public class GroundGenerator : MonoBehaviour
                 tileTmp.transform.position = spawnedRightWallTiles[spawnedRightWallTiles.Count - 1].endPoint.position - prevPos;
                 //tileTmp.ActivateRandomObstacle();
                 tileTmp.transform.SetParent(transform);
+                if (tileTmp.transform.childCount > 3)
+
+                {
+                    GameObject cube = tileTmp.transform.Find("Cube").gameObject;
+                    cube.GetComponent<MeshRenderer>().material = materials[3];
+                }
                 spawnedRightWallTiles.Add(tileTmp);
             }
         }
