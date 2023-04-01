@@ -28,16 +28,16 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // Always move forward!
-        _rb.AddForce(Vector3.forward * 5f * Time.deltaTime, ForceMode.Impulse);
+        _rb.AddForce(Vector3.forward * (5f * Time.deltaTime), ForceMode.Impulse);
 
         //Move left or right based on player inputs
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            _rb.AddForce((Quaternion.AngleAxis(-90, Vector3.forward) * currentGravityDirection) * 35f * Time.deltaTime, ForceMode.Impulse);
+            _rb.AddForce(Quaternion.AngleAxis(-90, Vector3.forward) * currentGravityDirection * (35f * Time.deltaTime), ForceMode.Impulse);
         }
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            _rb.AddForce((Quaternion.AngleAxis(90, Vector3.forward) * currentGravityDirection) * 35f * Time.deltaTime, ForceMode.Impulse);
+            _rb.AddForce(Quaternion.AngleAxis(90, Vector3.forward) * currentGravityDirection * (35f * Time.deltaTime), ForceMode.Impulse);
         }
 
         //Jump!
