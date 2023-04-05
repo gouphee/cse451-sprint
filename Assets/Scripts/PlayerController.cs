@@ -52,29 +52,31 @@ public class PlayerController : MonoBehaviour
         }
 
         //Jump!
+        const float jumpForce = 6.0f;
         if (Input.GetKey(KeyCode.Space))
         {
             if (canJump)
             {
                 canJump = false;
-                _rb.AddForce(-currentGravityDirection * 6.0f, ForceMode.Impulse);
+                _rb.AddForce(-currentGravityDirection * jumpForce, ForceMode.Impulse);
             }
         }
         
         //Super jump!
+        const float superJumpForce = 30.0f;
         if (Input.GetKey(KeyCode.W))
         {
             if (canSuperJump)
             {
                 canSuperJump = false;
-                _rb.AddForce(-currentGravityDirection * 30.0f, ForceMode.Impulse);
+                _rb.AddForce(-currentGravityDirection * superJumpForce, ForceMode.Impulse);
                 StartCoroutine("ResetSuperJumpPowerup");
             }
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            if (canInvertGravity)
+            if (canInvertGravity && canRotateWorld)
             {
                 canInvertGravity = false;
                 RotateWorld(180);
@@ -173,7 +175,7 @@ public class PlayerController : MonoBehaviour
             Physics.gravity = currentGravityDirection * 24f;
             Vector3 currentRotationVector = _rb.rotation.eulerAngles;
             Vector3 newRotationVector = new Vector3(0, 0, currentRotationVector.z + angle);
-            _rb.transform.DORotate(newRotationVector, 0.75f).OnComplete(() => { canRotateWorld = true; });
+            _rb.transform.DORotate(newRotationVector, 0.65f).SetEase(Ease.Linear).OnComplete(() => { canRotateWorld = true; });
         }
     }
 }
