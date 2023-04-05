@@ -182,7 +182,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: b74c31d447d2f5d41a61081bdf5e7126, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -570,7 +570,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: b74c31d447d2f5d41a61081bdf5e7126, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2157,9 +2157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   superJumpImage: {fileID: 569656227}
   invertGravityImage: {fileID: 94405741}
-  _gg: {fileID: 1547847112}
   canJump: 0
   canSuperJump: 0
   canInvertGravity: 0
   ground: {fileID: 1547847112}
-  score: 0

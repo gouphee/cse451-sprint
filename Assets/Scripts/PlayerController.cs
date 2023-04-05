@@ -109,12 +109,16 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator ResetInvertGravityPowerup()
     {
+        invertGravityImage.fillAmount = 0;
+        invertGravityImage.DOFillAmount(100, InvertGravityCooldown);
         yield return new WaitForSeconds(InvertGravityCooldown);
         canInvertGravity = true;
     }
 
     IEnumerator ResetSuperJumpPowerup()
     {
+        superJumpImage.fillAmount = 0;
+        superJumpImage.DOFillAmount(100, SuperJumpCooldown);
         yield return new WaitForSeconds(SuperJumpCooldown);
         canSuperJump = true;
     }
