@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class PlayerController : MonoBehaviour
     public GroundGenerator ground;
     private Vector3 currentGravityDirection = Vector3.down;
 
+    private bool canRotateWorld;
+
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
         StartCoroutine("ResetSuperJumpPowerup");
         canInvertGravity = true;
+        canRotateWorld = true;
     }
 
     // Update is called once per frame
@@ -36,14 +40,15 @@ public class PlayerController : MonoBehaviour
         // Always move forward!
         _rb.AddForce(Vector3.forward * (5f * Time.deltaTime), ForceMode.Impulse);
 
+        const float lateralMovementSpeed = 40f;
         //Move left or right based on player inputs
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            _rb.AddForce(Quaternion.AngleAxis(-90, Vector3.forward) * currentGravityDirection * (35f * Time.deltaTime), ForceMode.Impulse);
+            _rb.AddForce(Quaternion.AngleAxis(-90, Vector3.forward) * currentGravityDirection * (lateralMovementSpeed * Time.deltaTime), ForceMode.Impulse);
         }
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            _rb.AddForce(Quaternion.AngleAxis(90, Vector3.forward) * currentGravityDirection * (35f * Time.deltaTime), ForceMode.Impulse);
+            _rb.AddForce(Quaternion.AngleAxis(90, Vector3.forward) * currentGravityDirection * (lateralMovementSpeed * Time.deltaTime), ForceMode.Impulse);
         }
 
         //Jump!
@@ -161,8 +166,14 @@ public class PlayerController : MonoBehaviour
 
     void RotateWorld(int angle)
     {
-        currentGravityDirection = Quaternion.AngleAxis(angle, Vector3.forward) * currentGravityDirection;
-        Physics.gravity = currentGravityDirection * 24f;
-        _rb.transform.Rotate(new Vector3(0, 0, 1), angle);
+        if (canRotateWorld)
+        {
+            canRotateWorld = false;
+            currentGravityDirection = Quaternion.AngleAxis(angle, Vector3.forward) * currentGravityDirection;
+            Physics.gravity = currentGravityDirection * 24f;
+            Vector3 currentRotationVector = _rb.rotation.eulerAngles;
+            Vector3 newRotationVector = new Vector3(0, 0, currentRotationVector.z + angle);
+            _rb.transform.DORotate(newRotationVector, 0.75f).OnComplete(() => { canRotateWorld = true; });
+        }
     }
 }
