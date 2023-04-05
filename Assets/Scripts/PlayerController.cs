@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         Physics.gravity = currentGravityDirection * 24f;
 
         StartCoroutine("ResetSuperJumpPowerup");
-        canInvertGravity = true;
+        StartCoroutine("ResetInvertGravityPowerup");
         canRotateWorld = true;
     }
 
@@ -69,6 +69,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        //Invert gravity!
         if (Input.GetKey(KeyCode.S))
         {
             if (canInvertGravity && canRotateWorld)
@@ -79,8 +80,9 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        float x = _rb.position.x;
-        float y = _rb.position.y;
+        Vector3 currentPosition = _rb.position;
+        float x = currentPosition.x;
+        float y = currentPosition.y;
         
         if (y <= -25 || y >= 25)
         {
