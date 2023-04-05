@@ -1,9 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 using DG.Tweening;
@@ -18,15 +14,14 @@ public class PlayerController : MonoBehaviour
     public bool canSuperJump;
     public bool canInvertGravity;
     public GroundGenerator ground;
-    private Vector3 currentGravityDirection = Vector3.down;
-
+    private Vector3 currentGravityDirection;
     private bool canRotateWorld;
-
 
     // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        currentGravityDirection = Vector3.down;
         Physics.gravity = currentGravityDirection * 24f;
 
         StartCoroutine("ResetSuperJumpPowerup");
@@ -166,6 +161,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // If the world is not currently rotating, rotate the world (player, camera, and gravity) by [angle] degrees
+    // Uses DOTween plugin to create a smooth animation between gravity states
     void RotateWorld(int angle)
     {
         if (canRotateWorld)
