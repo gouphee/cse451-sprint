@@ -3,11 +3,14 @@ using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     // Outlets
     private Rigidbody _rb;
+    public Image superJumpImage;
+    public Image invertGravityImage;
 
     // State Tracking
     public bool canJump;
@@ -42,6 +45,10 @@ public class PlayerController : MonoBehaviour
     {
         // Always move forward!
         _rb.AddForce(Vector3.forward * (5f * Time.deltaTime), ForceMode.Impulse);
+
+        // Update UI based on status of powerups
+        superJumpImage.color = canSuperJump ? Color.green : Color.grey;
+        invertGravityImage.color = canInvertGravity ? Color.green : Color.grey;
 
         //Move left or right based on player inputs
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))

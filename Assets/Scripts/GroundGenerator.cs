@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class GroundGenerator : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class GroundGenerator : MonoBehaviour
     public int tilesToPreSpawn = 1; //How many tiles should be pre-spawned
     public int tilesWithoutObstacles = 3; //How many tiles at the beginning should not have obstacles, good for warm-up
 
+    public TMP_Text scoreText;
+    
     List<Vector3> spawnPoints = new List<Vector3>();
 
     List<PlatformTile> spawnedFloorTiles = new List<PlatformTile>();
@@ -31,7 +34,7 @@ public class GroundGenerator : MonoBehaviour
     // [HideInInspector]
     public bool gameOver = false;
     static bool gameStarted = false;
-    float score = 0;
+    public float score = 0;
 
     private bool topGap = false;
     private bool bottomGap = false;
@@ -377,8 +380,7 @@ public class GroundGenerator : MonoBehaviour
         }
 
 
-        GUI.color = Color.green;
-        GUI.Label(new Rect(5, 5, 200, 25), "Score: " + ((int)score));
+        scoreText.text = ((int)score).ToString();
     }
 
     private void ChangeChildrenCubeMaterials(Transform parent, Material newMaterial)
