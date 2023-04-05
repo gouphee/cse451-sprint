@@ -16,13 +16,21 @@ public class PlayerController : MonoBehaviour
     public GroundGenerator ground;
     private Vector3 currentGravityDirection;
     private bool canRotateWorld;
-
+    
+    // Configuration
+    private const float LateralMovementForce = 40f;
+    private const float JumpForce = 6.0f;
+    private const float SuperJumpForce = 30.0f;
+    private const float GravityForce = 24f;
+    private const int SuperJumpCooldown = 5;
+    private const int InvertGravityCooldown = 20;
+    
     // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
         currentGravityDirection = Vector3.down;
-        Physics.gravity = currentGravityDirection * 24f;
+        Physics.gravity = currentGravityDirection * GravityForce;
 
         StartCoroutine("ResetSuperJumpPowerup");
         StartCoroutine("ResetInvertGravityPowerup");
@@ -35,41 +43,38 @@ public class PlayerController : MonoBehaviour
         // Always move forward!
         _rb.AddForce(Vector3.forward * (5f * Time.deltaTime), ForceMode.Impulse);
 
-        const float lateralMovementSpeed = 40f;
         //Move left or right based on player inputs
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            _rb.AddForce(Quaternion.AngleAxis(-90, Vector3.forward) * currentGravityDirection * (lateralMovementSpeed * Time.deltaTime), ForceMode.Impulse);
+            _rb.AddForce(Quaternion.AngleAxis(-90, Vector3.forward) * currentGravityDirection * (LateralMovementForce * Time.deltaTime), ForceMode.Impulse);
         }
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            _rb.AddForce(Quaternion.AngleAxis(90, Vector3.forward) * currentGravityDirection * (lateralMovementSpeed * Time.deltaTime), ForceMode.Impulse);
+            _rb.AddForce(Quaternion.AngleAxis(90, Vector3.forward) * currentGravityDirection * (LateralMovementForce * Time.deltaTime), ForceMode.Impulse);
         }
 
-        //Jump!
-        const float jumpForce = 6.0f;
+        // Jump!
         if (Input.GetKey(KeyCode.Space))
         {
             if (canJump)
             {
                 canJump = false;
-                _rb.AddForce(-currentGravityDirection * jumpForce, ForceMode.Impulse);
+                _rb.AddForce(-currentGravityDirection * JumpForce, ForceMode.Impulse);
             }
         }
         
-        //Super jump!
-        const float superJumpForce = 30.0f;
+        // Super jump!
         if (Input.GetKey(KeyCode.W))
         {
             if (canSuperJump)
             {
                 canSuperJump = false;
-                _rb.AddForce(-currentGravityDirection * superJumpForce, ForceMode.Impulse);
+                _rb.AddForce(-currentGravityDirection * SuperJumpForce, ForceMode.Impulse);
                 StartCoroutine("ResetSuperJumpPowerup");
             }
         }
 
-        //Invert gravity!
+        // Invert gravity!
         if (Input.GetKey(KeyCode.S))
         {
             if (canInvertGravity && canRotateWorld)
@@ -80,6 +85,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        // Ensure the player hasn't fallen off the map (end the game if so)
         Vector3 currentPosition = _rb.position;
         float x = currentPosition.x;
         float y = currentPosition.y;
@@ -96,15 +102,13 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator ResetInvertGravityPowerup()
     {
-        yield return new WaitForSeconds(20);
-    
+        yield return new WaitForSeconds(InvertGravityCooldown);
         canInvertGravity = true;
     }
 
     IEnumerator ResetSuperJumpPowerup()
     {
-        yield return new WaitForSeconds(5);
-
+        yield return new WaitForSeconds(SuperJumpCooldown);
         canSuperJump = true;
     }
 
@@ -113,7 +117,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             RaycastHit[] hits = Physics.RaycastAll(transform.position, currentGravityDirection, 1.2f);
-            Debug.DrawRay(transform.position, currentGravityDirection * 1.2f, Color.red);
+            //Debug.DrawRay(transform.position, currentGravityDirection * 1.2f, Color.red);
 
             if (hits.Length > 0)
             {
@@ -171,7 +175,7 @@ public class PlayerController : MonoBehaviour
         {
             canRotateWorld = false;
             currentGravityDirection = Quaternion.AngleAxis(angle, Vector3.forward) * currentGravityDirection;
-            Physics.gravity = currentGravityDirection * 24f;
+            Physics.gravity = currentGravityDirection * GravityForce;
             Vector3 currentRotationVector = _rb.rotation.eulerAngles;
             Vector3 newRotationVector = new Vector3(0, 0, currentRotationVector.z + angle);
             _rb.transform.DORotate(newRotationVector, 0.65f).SetEase(Ease.Linear).OnComplete(() => { canRotateWorld = true; });
