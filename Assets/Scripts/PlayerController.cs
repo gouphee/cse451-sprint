@@ -105,6 +105,7 @@ public class PlayerController : MonoBehaviour
         {
             ground.gameOver = true;
         }
+
     }
 
     IEnumerator ResetInvertGravityPowerup()
@@ -125,6 +126,10 @@ public class PlayerController : MonoBehaviour
 
     public void OnCollisionStay(Collision collision)
     {
+        if (collision.gameObject.layer== LayerMask.NameToLayer("Obstacle"))
+        {
+            ground.gameOver = true;
+        };
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             RaycastHit[] hits = Physics.RaycastAll(transform.position, currentGravityDirection, 1.2f);
