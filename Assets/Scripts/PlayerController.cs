@@ -97,11 +97,11 @@ public class PlayerController : MonoBehaviour
         float x = currentPosition.x;
         float y = currentPosition.y;
         
-        if (y <= -25 || y >= 25)
+        if (y <= -6 || y >= 10)
         {
             ground.gameOver = true;
         }
-        if (x <= -25 || x >= 25)
+        if (x <= -8 || x >= 8)
         {
             ground.gameOver = true;
         }
