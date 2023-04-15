@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5217513378370151129}
   - component: {fileID: 5217513378370151128}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: ObstacleTile
   m_TagString: Finish
   m_Icon: {fileID: 0}

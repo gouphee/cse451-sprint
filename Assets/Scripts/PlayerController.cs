@@ -16,9 +16,10 @@ public class PlayerController : MonoBehaviour
     public bool canJump;
     public bool canSuperJump;
     public bool canInvertGravity;
-    public GroundGenerator ground;
+    public PlatformGenerator ground;
     private Vector3 currentGravityDirection;
     private bool canRotateWorld;
+    private float startTime;
     
     // Configuration
     private const float LateralMovementForce = 40f;
@@ -34,6 +35,9 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         currentGravityDirection = Vector3.down;
         Physics.gravity = currentGravityDirection * GravityForce;
+ 
+
+        startTime = Time.time;
 
         StartCoroutine("ResetSuperJumpPowerup");
         StartCoroutine("ResetInvertGravityPowerup");
@@ -44,7 +48,12 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // Always move forward!
-        //_rb.AddForce(Vector3.forward * (5f * Time.deltaTime), ForceMode.Impulse);
+        float initialVelocity = 5f; // Initial constant velocity
+        float velocityIncreaseRate = 0.1f; // Rate at which velocity increases over time
+
+        Vector3 newVelocity = _rb.velocity;
+        newVelocity.z = initialVelocity + velocityIncreaseRate * (Time.time - startTime);
+        _rb.velocity = newVelocity;
 
         // Update UI based on status of powerups
         superJumpImage.color = canSuperJump ? Color.green : Color.grey;
@@ -97,13 +106,17 @@ public class PlayerController : MonoBehaviour
         float x = currentPosition.x;
         float y = currentPosition.y;
         
-        if (y <= -20 || y >= 20)
+
+        if (y <= -0.5 || y >= 16.5)
+
         {
             ground.gameOver = true;
+            print('y');
         }
-        if (x <= -20 || x >= 20)
+        if (x <= -8.5 || x >= 8.5)
         {
             ground.gameOver = true;
+            print('x');
         }
 
     }
@@ -129,8 +142,10 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
         {
             ground.gameOver = true;
+            print("obstacle");
         }
         else if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+
         {
             RaycastHit[] hits = Physics.RaycastAll(transform.position, currentGravityDirection, 1.2f);
             //Debug.DrawRay(transform.position, currentGravityDirection * 1.2f, Color.red);
