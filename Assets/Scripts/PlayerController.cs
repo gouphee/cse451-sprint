@@ -97,11 +97,11 @@ public class PlayerController : MonoBehaviour
         float x = currentPosition.x;
         float y = currentPosition.y;
         
-        if (y <= -6 || y >= 10)
+        if (y <= -20 || y >= 20)
         {
             ground.gameOver = true;
         }
-        if (x <= -8 || x >= 8)
+        if (x <= -20 || x >= 20)
         {
             ground.gameOver = true;
         }
@@ -126,11 +126,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.layer== LayerMask.NameToLayer("Obstacle"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
         {
             ground.gameOver = true;
-        };
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        }
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             RaycastHit[] hits = Physics.RaycastAll(transform.position, currentGravityDirection, 1.2f);
             //Debug.DrawRay(transform.position, currentGravityDirection * 1.2f, Color.red);
