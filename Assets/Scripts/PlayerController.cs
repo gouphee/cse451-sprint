@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public TMP_Text scoreText;
     public TMP_Text finalScoreText;
     public TMP_Text highScoreText;
+    public TMP_Text deathHighScoreText;
 
     // State Tracking
     public bool canJump;
@@ -75,6 +76,8 @@ public class PlayerController : MonoBehaviour
             {
                 PlayerPrefs.SetFloat("highScore", score);
             }
+            string deathHighScore = "Best score: " + (int)highScore;
+            deathHighScoreText.text = deathHighScore;
             DOTween.KillAll();
             MenuController.instance.ShowGameOver();
             return;
