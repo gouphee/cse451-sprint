@@ -3,6 +3,7 @@ using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 using DG.Tweening;
+using TMPro;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rb;
     public Image superJumpImage;
     public Image invertGravityImage;
+    public TMP_Text scoreText;
 
     // State Tracking
     public bool canJump;
@@ -20,6 +22,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 currentGravityDirection;
     private bool canRotateWorld;
     private float startTime;
+    public float score;
+    private float currentVelocity;
     
     // Configuration
     private const float InitialForwardForce = 7f;
@@ -37,8 +41,6 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         currentGravityDirection = Vector3.down;
         Physics.gravity = currentGravityDirection * GravityForce;
- 
-
         startTime = Time.time;
 
         StartCoroutine("ResetSuperJumpPowerup");
@@ -53,7 +55,8 @@ public class PlayerController : MonoBehaviour
         Vector3 newVelocity = _rb.velocity;
         newVelocity.z = InitialForwardForce + ForwardForceIncreaseRate * (Time.time - startTime);
         _rb.velocity = (newVelocity.z > 20f) ? Vector3.forward * 20f : newVelocity;
-
+        currentVelocity = _rb.velocity.z;
+        
         // Update UI based on status of powerups
         superJumpImage.color = canSuperJump ? Color.green : Color.grey;
         invertGravityImage.color = canInvertGravity ? Color.green : Color.grey;
@@ -109,14 +112,15 @@ public class PlayerController : MonoBehaviour
 
         {
             ground.gameOver = true;
-            print('y');
         }
         if (x <= -8.5 || x >= 8.5)
         {
             ground.gameOver = true;
-            print('x');
         }
-
+        
+        // Update score and GUI
+        score += (Time.deltaTime * currentVelocity);
+        scoreText.text = ((int)score).ToString();
     }
 
     IEnumerator ResetInvertGravityPowerup()
