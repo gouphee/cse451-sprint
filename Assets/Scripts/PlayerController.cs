@@ -144,10 +144,8 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
         {
             ground.gameOver = true;
-            print("obstacle");
         }
         else if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-
         {
             RaycastHit[] hits = Physics.RaycastAll(transform.position, currentGravityDirection, 1.2f);
             //Debug.DrawRay(transform.position, currentGravityDirection * 1.2f, Color.red);

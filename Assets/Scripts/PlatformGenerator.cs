@@ -22,7 +22,6 @@ public class PlatformGenerator : MonoBehaviour
     private float nextPlatformPosition;
 
     // [HideInInspector]
-    public bool gameOver = false;
     static bool gameStarted = false;
     public float score = 0;
 
@@ -100,24 +99,6 @@ public class PlatformGenerator : MonoBehaviour
             DestroyOldestTile(leftWallTiles);
             DestroyOldestTile(rightWallTiles);
             DestroyOldestTile(ceilingTiles);
-        }
-
-        if (gameOver || !gameStarted)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                if (gameOver)
-                {
-                    //Restart current scene
-                    Scene scene = SceneManager.GetActiveScene();
-                    SceneManager.LoadScene(scene.name);
-                }
-                else
-                {
-                    //Start the game
-                    gameStarted = true;
-                }
-            }
         }
     }
 
@@ -242,27 +223,5 @@ public class PlatformGenerator : MonoBehaviour
         }
 
         isGapActive = false;
-    }
-
-
-    void OnGUI()
-    {
-        if (gameOver)
-        {
-            GUI.color = Color.red;
-            GUI.Label(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 200), "Game Over\nYour score is: " + ((int)score) + "\nPress 'Space' to restart");
-        }
-        else
-        {
-            if (!gameStarted)
-            {
-                GUI.color = Color.red;
-                GUI.Label(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 100, 200, 200), "Press 'Space' to start");
-            }
-        }
-
-
-        GUI.color = Color.green;
-        GUI.Label(new Rect(5, 5, 200, 25), "Score: " + ((int)score));
     }
 }
