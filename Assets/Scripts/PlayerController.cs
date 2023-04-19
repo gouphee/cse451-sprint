@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController instance;
+    
     // Outlets
     private Rigidbody _rb;
     public Image superJumpImage;
@@ -24,6 +26,9 @@ public class PlayerController : MonoBehaviour
     private float startTime;
     public float score;
     private float currentVelocity;
+
+    public bool isPaused;
+    public bool gameOver;
     
     // Configuration
     private const float InitialForwardForce = 10f;
@@ -33,7 +38,7 @@ public class PlayerController : MonoBehaviour
     private const float SuperJumpForce = 20.0f;
     private const float GravityForce = 24f;
     private const int SuperJumpCooldown = 5;
-    private const int InvertGravityCooldown = 20;
+    private const int InvertGravityCooldown = 10;
     
     // Start is called before the first frame update
     void Start()
@@ -51,6 +56,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isPaused)
+        {
+            return;
+        }
+
+        if (gameOver)
+        {
+            MenuController.instance.ShowGameOver();
+            return;
+        }
+        
         // Always move forward!
         Vector3 newVelocity = _rb.velocity;
         newVelocity.z = InitialForwardForce + ForwardForceIncreaseRate * (Time.time - startTime);
@@ -69,6 +85,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
             _rb.AddForce(Quaternion.AngleAxis(90, Vector3.forward) * currentGravityDirection * (LateralMovementForce * Time.deltaTime), ForceMode.Impulse);
+        }
+        
+        // Pause game
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            MenuController.instance.ShowPauseMenu();
         }
 
         // Jump!
@@ -109,13 +131,12 @@ public class PlayerController : MonoBehaviour
         float y = currentPosition.y;
 
         if (y <= -0.5 || y >= 16.5)
-
         {
-            ground.gameOver = true;
+            gameOver = true;
         }
         if (x <= -8.5 || x >= 8.5)
         {
-            ground.gameOver = true;
+            gameOver = true;
         }
         
         // Update score and GUI
@@ -143,7 +164,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
         {
-            ground.gameOver = true;
+            gameOver = true;
         }
         else if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
