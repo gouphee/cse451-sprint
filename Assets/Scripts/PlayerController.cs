@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         // Always move forward!
         Vector3 newVelocity = _rb.velocity;
         newVelocity.z = InitialForwardForce + ForwardForceIncreaseRate * (Time.time - startTime);
-        _rb.velocity = newVelocity;
+        _rb.velocity = (newVelocity.z > 20f) ? Vector3.forward * 20f : newVelocity;
 
         // Update UI based on status of powerups
         superJumpImage.color = canSuperJump ? Color.green : Color.grey;
