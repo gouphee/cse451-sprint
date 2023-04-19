@@ -371,7 +371,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 95, y: 40}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &317975795
@@ -1011,7 +1011,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 26def5c7c332f114a819ec2df3a858a4, type: 2}
   - {fileID: 2100000, guid: 3a33dd7a5fabe1c43ae6b0f96c57c6d9, type: 2}
   numberOfStartingTiles: 5
-  numberOfPlatformsVisible: 5
+  numberOfPlatformsVisible: 20
   platformLength: 4
   platformSpacing: 0
   player: {fileID: 1786082139}
@@ -1440,7 +1440,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 70}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1051355527
@@ -1999,7 +1999,7 @@ Rigidbody:
   m_GameObject: {fileID: 1786082138}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 1.5
   m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}

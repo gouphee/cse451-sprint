@@ -41,7 +41,7 @@ public class PlatformGenerator : MonoBehaviour
         rightWallTiles = new Queue<GameObject>();
         ceilingTiles = new Queue<GameObject>();
 
-        for (int i = 0; i < numberOfPlatformsVisible + tilesBehindPlayer; i++)
+        for (int i = 0; i < numberOfStartingTiles + tilesBehindPlayer; i++)
 
         {
             // Use the same prefab for the first "x" tiles, where x is numberOfStartingTiles.
