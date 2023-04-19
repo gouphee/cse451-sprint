@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public Image superJumpImage;
     public Image invertGravityImage;
     public TMP_Text scoreText;
+    public TMP_Text finalScoreText;
 
     // State Tracking
     public bool canJump;
@@ -77,8 +78,8 @@ public class PlayerController : MonoBehaviour
         currentVelocity = _rb.velocity.z;
         
         // Update UI based on status of powerups
-        superJumpImage.color = canSuperJump ? Color.green : Color.grey;
-        invertGravityImage.color = canInvertGravity ? Color.green : Color.grey;
+        superJumpImage.color = canSuperJump ? Color.green : Color.red;
+        invertGravityImage.color = canInvertGravity ? Color.green : Color.red;
 
         //Move left or right based on player inputs
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
@@ -145,20 +146,30 @@ public class PlayerController : MonoBehaviour
         // Update score and GUI
         score += (currentVelocity * 3) * Time.deltaTime;
         scoreText.text = ((int)score).ToString();
+        string finalScore = "Final score: " + (int)score;
+        finalScoreText.text = finalScore;
     }
 
     IEnumerator ResetInvertGravityPowerup()
     {
-        invertGravityImage.fillAmount = 0;
-        invertGravityImage.DOFillAmount(100, InvertGravityCooldown);
+        if (invertGravityImage != null)
+        {
+            invertGravityImage.fillAmount = 0;
+            invertGravityImage.DOFillAmount(100, InvertGravityCooldown);  
+        }
+
         yield return new WaitForSeconds(InvertGravityCooldown);
         canInvertGravity = true;
     }
 
     IEnumerator ResetSuperJumpPowerup()
     {
-        superJumpImage.fillAmount = 0;
-        superJumpImage.DOFillAmount(100, SuperJumpCooldown);
+        if (superJumpImage != null)
+        {
+            superJumpImage.fillAmount = 0;
+            superJumpImage.DOFillAmount(100, SuperJumpCooldown);
+        }
+
         yield return new WaitForSeconds(SuperJumpCooldown);
         canSuperJump = true;
     }
@@ -166,6 +177,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator CheckForStuckCharacter()
     {
         yield return new WaitForSeconds(0.1f);
+        
         if (Math.Abs(lastZPosition - _rb.position.z) < 0.1)
         {
             gameOver = true;

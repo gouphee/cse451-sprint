@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +8,7 @@ public class MenuController : MonoBehaviour
     // Outlets
     public GameObject pauseMenu;
     public GameObject gameOverScreen;
+    public GameObject UI;
     
     // Methods
     void Awake()
@@ -52,7 +51,8 @@ public class MenuController : MonoBehaviour
     public void ShowGameOver()
     {
         SwitchMenu(gameOverScreen);
-        gameObject.SetActive(true);
+        UI.SetActive(false);
         Time.timeScale = 0;
+        gameObject.SetActive(true);
     }
 }
