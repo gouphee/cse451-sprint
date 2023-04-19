@@ -22,9 +22,11 @@ public class PlayerController : MonoBehaviour
     private float startTime;
     
     // Configuration
-    private const float LateralMovementForce = 40f;
+    private const float InitialForwardForce = 7f;
+    private const float ForwardForceIncreaseRate = 0.01f;
+    private const float LateralMovementForce = 30f;
     private const float JumpForce = 6.0f;
-    private const float SuperJumpForce = 30.0f;
+    private const float SuperJumpForce = 20.0f;
     private const float GravityForce = 24f;
     private const int SuperJumpCooldown = 5;
     private const int InvertGravityCooldown = 20;
@@ -48,12 +50,8 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // Always move forward!
-        float initialVelocity = 5f; // Initial constant velocity
-        float velocityIncreaseRate = 0.1f; // Rate at which velocity increases over time
-
-        Vector3 newVelocity = _rb.velocity;
-        newVelocity.z = initialVelocity + velocityIncreaseRate * (Time.time - startTime);
-        _rb.velocity = newVelocity;
+        float forwardSpeed = InitialForwardForce + (ForwardForceIncreaseRate * (Time.time - startTime));
+        _rb.AddForce(Vector3.forward * (forwardSpeed * Time.deltaTime), ForceMode.Impulse);
 
         // Update UI based on status of powerups
         superJumpImage.color = canSuperJump ? Color.green : Color.grey;
@@ -105,7 +103,6 @@ public class PlayerController : MonoBehaviour
         Vector3 currentPosition = _rb.position;
         float x = currentPosition.x;
         float y = currentPosition.y;
-        
 
         if (y <= -0.5 || y >= 16.5)
 
