@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private float startTime;
     public float score;
     private float currentVelocity;
+    private float lastZPosition;
 
     public bool isPaused;
     public bool gameOver;
@@ -50,6 +52,7 @@ public class PlayerController : MonoBehaviour
 
         StartCoroutine("ResetSuperJumpPowerup");
         StartCoroutine("ResetInvertGravityPowerup");
+        StartCoroutine("CheckForStuckCharacter");
         canRotateWorld = true;
     }
 
@@ -158,6 +161,21 @@ public class PlayerController : MonoBehaviour
         superJumpImage.DOFillAmount(100, SuperJumpCooldown);
         yield return new WaitForSeconds(SuperJumpCooldown);
         canSuperJump = true;
+    }
+
+    IEnumerator CheckForStuckCharacter()
+    {
+        yield return new WaitForSeconds(0.1f);
+        if (Math.Abs(lastZPosition - _rb.position.z) < 0.1)
+        {
+            gameOver = true;
+        }
+        else
+        {
+            lastZPosition = _rb.position.z;
+        }
+        
+        StartCoroutine("CheckForStuckCharacter");
     }
 
     public void OnCollisionStay(Collision collision)
