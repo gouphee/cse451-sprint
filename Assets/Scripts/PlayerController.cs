@@ -18,7 +18,8 @@ public class PlayerController : MonoBehaviour
     public TMP_Text scoreText;
     public TMP_Text finalScoreText;
     public TMP_Text highScoreText;
-
+    public TMP_Text highScoreGameOverText;
+    
     // State Tracking
     public bool canJump;
     public bool canSuperJump;
@@ -59,6 +60,7 @@ public class PlayerController : MonoBehaviour
         canRotateWorld = true;
         highScore = PlayerPrefs.GetFloat("highScore");
         highScoreText.text = ((int)highScore).ToString();
+        highScoreGameOverText.text = "Your high score: " + (int)highScore;
     }
 
     // Update is called once per frame
@@ -74,7 +76,10 @@ public class PlayerController : MonoBehaviour
             if (highScore < score)
             {
                 PlayerPrefs.SetFloat("highScore", score);
+                highScoreGameOverText.text = "Your high score: " + (int)score;
             }
+            finalScoreText.text = "Final score: " + (int)score;
+            
             DOTween.KillAll();
             MenuController.instance.ShowGameOver();
             return;
@@ -156,9 +161,6 @@ public class PlayerController : MonoBehaviour
         // Update score and GUI
         score += (currentVelocity * 3) * Time.deltaTime;
         scoreText.text = ((int)score).ToString();
-        string finalScore = "Final score: " + (int)score;
-        finalScoreText.text = finalScore;
-
     }
 
     IEnumerator ResetInvertGravityPowerup()
