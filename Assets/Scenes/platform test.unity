@@ -2004,6 +2004,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 1066102923}
   gameOverScreen: {fileID: 1244039090}
+  UI: {fileID: 1237637847}
 --- !u!1 &969799635
 GameObject:
   m_ObjectHideFlags: 0
