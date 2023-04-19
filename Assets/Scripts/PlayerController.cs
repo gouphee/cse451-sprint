@@ -51,7 +51,9 @@ public class PlayerController : MonoBehaviour
     {
         // Always move forward!
         float forwardSpeed = InitialForwardForce + (ForwardForceIncreaseRate * (Time.time - startTime));
-        _rb.AddForce(Vector3.forward * (forwardSpeed * Time.deltaTime), ForceMode.Impulse);
+        Vector3 newVelocity = _rb.velocity;
+        newVelocity.z = InitialForwardForce + ForwardForceIncreaseRate * (Time.time - startTime);
+        _rb.velocity = newVelocity;
 
         // Update UI based on status of powerups
         superJumpImage.color = canSuperJump ? Color.green : Color.grey;
