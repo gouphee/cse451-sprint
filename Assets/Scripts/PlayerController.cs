@@ -26,10 +26,10 @@ public class PlayerController : MonoBehaviour
     private float currentVelocity;
     
     // Configuration
-    private const float InitialForwardForce = 7f;
+    private const float InitialForwardForce = 10f;
     private const float ForwardForceIncreaseRate = 0.01f;
     private const float LateralMovementForce = 30f;
-    private const float JumpForce = 6.0f;
+    private const float JumpForce = 12.0f;
     private const float SuperJumpForce = 20.0f;
     private const float GravityForce = 24f;
     private const int SuperJumpCooldown = 5;
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Jump!
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (canJump)
             {
@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
         }
         
         // Super jump!
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W))
         {
             if (canSuperJump)
             {
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
         }
         
         // Update score and GUI
-        score += (Time.deltaTime * currentVelocity);
+        score += (currentVelocity * 3) * Time.deltaTime;
         scoreText.text = ((int)score).ToString();
     }
 
