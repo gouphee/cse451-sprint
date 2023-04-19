@@ -22,7 +22,6 @@ public class MenuController : MonoBehaviour
         SwitchMenu(pauseMenu);
         gameObject.SetActive(true);
         Time.timeScale = 0;
-        PlayerController.instance.isPaused = true;
     }
 
     public void Hide()

@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
 
         if (gameOver)
         {
+            DOTween.KillAll();
             MenuController.instance.ShowGameOver();
             return;
         }
@@ -94,6 +95,7 @@ public class PlayerController : MonoBehaviour
         // Pause game
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            isPaused = true;
             MenuController.instance.ShowPauseMenu();
         }
 
@@ -152,24 +154,17 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator ResetInvertGravityPowerup()
     {
-        if (invertGravityImage != null)
-        {
-            invertGravityImage.fillAmount = 0;
-            invertGravityImage.DOFillAmount(100, InvertGravityCooldown);  
-        }
 
+        invertGravityImage.fillAmount = 0;
+        invertGravityImage.DOFillAmount(100, InvertGravityCooldown);
         yield return new WaitForSeconds(InvertGravityCooldown);
         canInvertGravity = true;
     }
 
     IEnumerator ResetSuperJumpPowerup()
     {
-        if (superJumpImage != null)
-        {
-            superJumpImage.fillAmount = 0;
-            superJumpImage.DOFillAmount(100, SuperJumpCooldown);
-        }
-
+        superJumpImage.fillAmount = 0;
+        superJumpImage.DOFillAmount(100, SuperJumpCooldown);
         yield return new WaitForSeconds(SuperJumpCooldown);
         canSuperJump = true;
     }
