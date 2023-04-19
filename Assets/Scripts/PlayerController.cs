@@ -50,7 +50,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // Always move forward!
-        float forwardSpeed = InitialForwardForce + (ForwardForceIncreaseRate * (Time.time - startTime));
         Vector3 newVelocity = _rb.velocity;
         newVelocity.z = InitialForwardForce + ForwardForceIncreaseRate * (Time.time - startTime);
         _rb.velocity = newVelocity;
