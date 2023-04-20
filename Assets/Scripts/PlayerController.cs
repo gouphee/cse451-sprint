@@ -46,10 +46,14 @@ public class PlayerController : MonoBehaviour
     private const int SuperJumpCooldown = 5;
     private const int InvertGravityCooldown = 10;
     
-    // Start is called before the first frame update
-    void Start()
+    // Methods
+    void Awake()
     {
         instance = this;
+    }
+    
+    void Start()
+    {
         _rb = GetComponent<Rigidbody>();
         currentGravityDirection = Vector3.down;
         Physics.gravity = currentGravityDirection * GravityForce;
@@ -63,8 +67,7 @@ public class PlayerController : MonoBehaviour
         highScoreText.text = ((int)highScore).ToString();
         highScoreGameOverText.text = "Your high score: " + (int)highScore;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (isPaused)
