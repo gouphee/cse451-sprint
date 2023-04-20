@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         _rb = GetComponent<Rigidbody>();
         currentGravityDirection = Vector3.down;
         Physics.gravity = currentGravityDirection * GravityForce;
